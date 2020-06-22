@@ -45,7 +45,7 @@ make_daily <- function(df){
 
 # Make plots of whole year of daily data
 make_plot <- function(df, bldg){
-  p_df <- plot_ly(df, x = ~Date, y = ~Elec, 
+  p_df <- plot_ly(df, x = ~DateTime, y = ~Elec, 
                   type="scatter", mode="lines", name="Elec",
                   line = list(width = 1)) %>%
     add_trace(y = ~Cool, name = 'Cool') %>%
