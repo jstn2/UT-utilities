@@ -168,7 +168,7 @@ perc <<- 0.95
 # as the "true event" state for comparison with the detected events. For
 # example, if action_len is set to one day, then this variable will be zero for
 # the first day of the event and one for the rest of the event. If this length
-# is longer than min_eventdays, the fuction that adds synthetic events will
+# is longer than min_eventdays, the function that adds synthetic events will
 # break.
 action_len <<- 5
 
@@ -183,8 +183,8 @@ action_len <<- 5
 switches <<- c("elec","cool","heat","water")
 num_events <<- 9 # How many events to add
 
+# Add events
 # all_event function is in detect_event_function.R
-
 df_preds <- list()
 for (i in 1:length(dfs_tot)){
   df_preds[[i]] <- all_event(dfs_tot[[i]], rf_mods[[i]])
@@ -201,7 +201,7 @@ for (i in 1:length(df_preds)){
 
 mod_frac <- .7
 time_frac <- .95
-action_len <- 5   # days
+
 
 
 df_check <- list()
@@ -293,7 +293,7 @@ eval_tables <- function(df){
 
 all_tabs <- list()
 for (i in 1:length(df_check)){
-  all_tabs[[i]] <- eval_tables(df_check[[i]], bldg_names[i])
+  all_tabs[[i]] <- eval_tables(df_check[[i]])
 }
 
 
