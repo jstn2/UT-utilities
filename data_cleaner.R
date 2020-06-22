@@ -124,8 +124,8 @@ save(TEMP, file=file.path(data_dir,"temp.RData"))
 # water <- water-file-name
 
 # Change these two rows to avoid NA from DST start using as_datetime()
-water$TS[18349] <- '2018-03-11 03:00:00'
-water$TS[53293] <- '2019-03-10 03:00:00'
+#water$TS[18349] <- '2018-03-11 03:00:00'
+#water$TS[53293] <- '2019-03-10 03:00:00'
 water$TS <- as_datetime(water$TS) #Convert from character
 
 # Default tz from the as_datetime() function is UTC, so update it to central
