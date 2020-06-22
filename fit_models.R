@@ -28,6 +28,31 @@ library(BBmisc)
 library(plotly)
 library(dplyr)
 
+
+# Set these values if you want to upload to your plotly account
+Sys.setenv("plotly_username"=" ")
+Sys.setenv("plotly_api_key"=" ")
+
+# set to TRUE to export static images of plots 
+save_img <- TRUE
+#save_img <- FALSE
+
+# set to TRUE to show plots in RStudio plots or viewer window
+viewer <- TRUE
+#viewer <- FALSE
+
+# set to TRUE to upload and host plots on plotly account.
+# This requires username and api_key to be set in your system environment.
+#upload <- TRUE
+upload <- FALSE
+
+
+# Coerce control variables to logical
+if (class(save_img) != "logical") save_img <- FALSE
+if (class(viewer) != "logical")   viewer <- FALSE
+if (class(upload) != "logical")   upload <- FALSE
+
+
 # Set the working directory to the folder where this script is stored
 library(tidyverse)
 getCurrentFileLocation <-  function(){
@@ -367,16 +392,16 @@ save(rf_mods701,  file=file.path(data_dir,"rf_mods701.RData"))
 
 # pdf(file="r2_and_RMSE.pdf")
 # for (i in 1:length(all_mods)){
-#   df <- dfs[[i]]
+#   df <- dfs_clean[[i]]
 #   train_test_list <- train_test(df)
-#   eval_output <- test_rf(all_mods[[i]][c(1:4,9:12)],train_test_list,names(dfs)[i]) #Function gives r2 table and rmse table
+#   eval_output <- test_rf(all_mods[[i]][c(1:4,9:12)],train_test_list,names(dfs_clean)[i]) #Function gives r2 table and rmse table
 #   rmse_t <- t(eval_output[[2]][,2:3])
 #   r2_t <- t(eval_output[[1]][,2:3])
 #   colnames(r2_t) <- as.list(eval_output[[1]]$model)
 #   colnames(rmse_t) <- as.list(eval_output[[2]]$model)
-#   barplot(as.matrix(r2_t), beside=TRUE, main = paste(names(dfs)[i],"R^2 values (cleaned data)"),
+#   barplot(as.matrix(r2_t), beside=TRUE, main = paste(names(dfs_clean)[i],"R^2 values (cleaned data)"),
 #           las=2, legend=TRUE, xlim = c(0, 50))
-#   barplot(as.matrix(rmse_t), beside=TRUE, main = paste(names(dfs)[i],"RMSE values (cleaned data)"),
+#   barplot(as.matrix(rmse_t), beside=TRUE, main = paste(names(dfs_clean)[i],"RMSE values (cleaned data)"),
 #           las=2, legend=TRUE, xlim = c(0, 50))
 # }
 # dev.off()
@@ -388,9 +413,9 @@ setwd(tab_dir)
 file_name = "all_mods_eval_tables_rf.csv"
 sink(file_name)
 for (i in 1:length(all_mods)){
-  df <- dfs[[i]]
+  df <- dfs_clean[[i]]
   train_test_list <- train_test(df)
-  eval_output <- test_rf(all_mods[[i]],train_test_list,names(dfs)[i]) #Function gives r2 table and rmse table
+  eval_output <- test_rf(all_mods[[i]],train_test_list,names(dfs_clean)[i]) #Function gives r2 table and rmse table
   rmse_t <- t(eval_output[[2]][,2:3])
   r2_t <- t(eval_output[[1]][,2:3])
   colnames(r2_t) <- as.list(eval_output[[1]]$model)
@@ -412,9 +437,9 @@ setwd(wd)
 
 # pdf(file="rf_varImp.pdf", width=7, height=5)
 # for (i in 1:length(all_mods)){
-#   df <- dfs[[i]]
+#   df <- dfs_clean[[i]]
 #   train_test_list <- train_test(df)
-#   eval_output <- test_rf(all_mods[[i]][c(1:4,9:12)],train_test_list,names(dfs)[i]) #Function gives r2 table and rmse table
+#   eval_output <- test_rf(all_mods[[i]][c(1:4,9:12)],train_test_list,names(dfs_clean)[i]) #Function gives r2 table and rmse table
 # }
 # dev.off()
 
