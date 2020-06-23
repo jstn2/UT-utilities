@@ -203,7 +203,7 @@ mod_frac <- .7
 time_frac <- .95
 
 
-
+# Mark individual error flags and decide on final alarm
 df_check <- list()
 for (i in 1:length(df_preds)){
   df_check[[i]] <- post_process_events(df_preds[[i]], action_len, time_frac, mod_frac)
