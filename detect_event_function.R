@@ -34,7 +34,7 @@ mark_events <- function(df, df_c) {
   df$W_event <- integer(length)
   # Set event variable to 1 if the clean data is NA
   # Mark other outliers by referencing index
-  extras <- c(830,848:849,2018,5214,7370:7371)
+  #extras <- c(830,848:849,2018,5214,7370:7371)
   df$E_event[which(is.na(df_c$Elec))] <- 1
   df$E_event[extras] <- 1
   df$C_event[which(is.na(df_c$Cool))] <- 1
