@@ -454,13 +454,12 @@ extra_clean <- function(df){
   return(df)
 }
 
-for (i in 1:length(dfs_tot)){
-  dfs_clean[[i]] <- extra_clean(dfs_clean[[i]])
-}
+# Uncomment the following lines to call the extra_clean function
+# for (i in 1:length(dfs_tot)){
+#   dfs_clean[[i]] <- extra_clean(dfs_clean[[i]])
+# }
 
-#
-#
-#
+
 
 
 # For this plot, need the second output of the function e.g. clean_data(ECJtot)[[2]]
