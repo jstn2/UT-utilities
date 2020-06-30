@@ -74,13 +74,16 @@ data_dir <- paste0(getwd(),"/data")
 load(file.path(data_dir, "hourly_CEHW.RData"))
 
 
-#load("models.RData")
+# Load all the models or uncomment next lines to load only random forrest models
+load(file.path(data_dir, "models_with_cubist.RData"))
+rf_mods <- all_mods
+
 # save some time by only loading rfmods
-load(file.path(data_dir, "rf_mods701.RData"))
-rf_mods <- rf_mods701
+#load(file.path(data_dir, "rf_mods701.RData"))
+#rf_mods <- rf_mods701
 
 # set to TRUE to export static images of plots 
-save_img <- TRUE
+#save_img <- TRUE
 save_img <- FALSE
 
 # set to TRUE to show plots in RStudio plots or viewer window
