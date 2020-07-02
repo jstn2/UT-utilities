@@ -57,8 +57,8 @@ for (i in 1:length(name_list)) {
   assign(name_list[i], fread(file.path(data_dir, input[i])))
 }
 
-bldg_names <- c("ECJ", "GDC","JCD")
-dfs_tot <- list(ECJ, GDC, JCD)
+bldg_names <- c("ECJ", "GDC","JCD","BUI")
+dfs_tot <- list(ECJ, GDC, JCD, BUI)
 
 # //////////////////////////////////////////
 # import and process the temperature data 
@@ -136,7 +136,8 @@ tz(water$TS) <- "America/Chicago"
 #cols <- 2:4
 # Shift the water back by 15 minutes (one time step), and cut out RLM data
 #wat_shift <-  water[, (cols) := shift(.SD, 1, NA, "lead"), .SDcols=cols]
-wat_shift <- cbind(water[,1], water[, shift(.SD, 1, NA, "lead", TRUE), .SDcols=2:4])
+#wat_shift <- cbind(water[,1], water[, shift(.SD, 1, NA, "lead", TRUE), .SDcols=2:4])                  #original line
+wat_shift <- cbind(water[,1], water[, shift(.SD, 1, NA, "lead", TRUE), .SDcols=2:length(water)])
 
 # Check for NA in water data and investigate
 which(is.na(wat_shift[,2]))
