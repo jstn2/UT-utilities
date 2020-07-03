@@ -268,46 +268,47 @@ a <- list(
   title = "15 min Water Use (Gal)",
   showticklabels = TRUE
 )
-p1 <- plot_ly(wat_clean, x = ~DateTime, y = ~ECJ, type="scatter", mode="lines", name='ECJ',
-             line = list(width = 0.5)) %>%
-  add_trace(y = ~GDC, name = 'GDC') %>%
-  add_trace(y = ~JCD, name = 'JCD') %>%
-  layout(yaxis=a)
+p1 <- plot_ly(wat_clean, x = ~DateTime, y = ~eval(as.name(bldg_names[1])), type="scatter", mode="lines", name=bldg_names[1],
+             line = list(width = 0.5))
+  for (i in 2:length(bldg_names)) {
+    p1 <- p1 %>% add_trace(p1, y = ~eval(as.name(bldg_names[i])), name = bldg_names[i])
+  }
+  p1 <- p1 %>% layout(yaxis=a)
 # htmlwidgets::saveWidget(as_widget(p1), "water_15min.html")
 #p1
-p2 <- plot_ly(wat_uc, x = ~DateTime, y = ~ECJ, type="scatter", mode="lines", name='ECJ',
-              line = list(width = 0.5)) %>%
-  add_trace(y = ~GDC, name = 'GDC') %>%
-  add_trace(y = ~JCD, name = 'JCD') %>%
-  layout(yaxis=a)
+p2 <- plot_ly(wat_uc, x = ~DateTime, y = ~eval(as.name(bldg_names[1])), type="scatter", mode="lines", name=paste(bldg_names[1],"uc"),
+              line = list(width = 0.5))
+  for (i in 2:length(bldg_names)) {
+    p2 <- p2 %>% add_trace(p2, y = ~eval(as.name(bldg_names[i])), name = paste(bldg_names[i],"uc"))
+  }
+  p2 <- p2 %>% layout(yaxis=a)
 # htmlwidgets::saveWidget(as_widget(p2), "water_raw_15min.html")
 #p2
-
-#p = list(p1,p2)
-#p_tot <- subplot(p,nrows=2,shareX=TRUE, titleY=TRUE)
-#p_tot
-
+p = list(p1,p2)
+p_tot <- subplot(p,nrows=2,shareX=TRUE, titleY=TRUE)
+p_tot
 
 
-
-
-p3 <- plot_ly(wat_hour, x = ~DateTime, y = ~ECJ, type="scatter", mode="lines", name='ECJ',
-              line = list(width = 0.5)) %>%
-  add_trace(y = ~GDC, name = 'GDC') %>%
-  add_trace(y = ~JCD, name = 'JCD') %>%
-  layout(yaxis=list(title="Hourly Water Use (Gal)"), colorway=c('#00ae48','#167cb9','#ff0606','#8e44ad'))
-# htmlwidgets::saveWidget(as_widget(p3), "water_hour.html")
+p3 <- plot_ly(wat_hour, x = ~DateTime, y = ~eval(as.name(bldg_names[1])), type="scatter", mode="lines", name=bldg_names[1],
+              line = list(width = 0.5))
+  for (i in 2:length(bldg_names)) {
+    p3 <- p3 %>% add_trace(p3, y = ~eval(as.name(bldg_names[i])), name = bldg_names[i])
+  }
+  p3 <- p3 %>% layout(p3, yaxis=list(title="Hourly Water Use (Gal)"), colorway=c('#00ae48','#167cb9','#ff0606','#8e44ad'))
+#htmlwidgets::saveWidget(as_widget(p3), "water_hour.html")
 #p3
-p4 <- plot_ly(wat_hour_uc, x = ~DateTime, y = ~ECJ, type="scatter", mode="lines", name='ECJ',
-              line = list(width = 0.5)) %>%
-  add_trace(y = ~GDC, name = 'GDC') %>%
-  add_trace(y = ~JCD, name = 'JCD') %>%
-  layout(yaxis=list(title="Hourly Water Use (raw) (Gal)"), colorway = c('#00ae48','#167cb9','#ff0606','#8e44ad'))
-# htmlwidgets::saveWidget(as_widget(p4), "water_uc_hour.html")
+
+p4 <- plot_ly(wat_hour_uc, x = ~DateTime, y = ~eval(as.name(bldg_names[1])), type="scatter", mode="lines", name=paste(bldg_names[1],"uc"),
+              line = list(width = 0.5))
+  for (i in 2:length(bldg_names)) {
+    p4 <- p4 %>% add_trace(p4, y = ~eval(as.name(bldg_names[i])), name = paste(bldg_names[i],"uc"))
+  }
+  p4 <- p4 %>% layout(yaxis=list(title="Hourly Water Use (raw) (Gal)"), colorway = c('#00ae48','#167cb9','#ff0606','#8e44ad'))
+#htmlwidgets::saveWidget(as_widget(p4), "water_uc_hour.html")
 #p4
-#p = list(p3,p4)
-#p_tot_h <- subplot(p,nrows=2,shareX=TRUE, titleY=TRUE)
-#p_tot_h
+p = list(p3,p4)
+p_tot_h <- subplot(p,nrows=2,shareX=TRUE, titleY=TRUE)
+p_tot_h
 
 # /////////////////////////////////////////////////////
 # End Water Data Cleaning
@@ -486,7 +487,7 @@ make_plot <- function(df, df_uc, name){
   
   p = list(p_df,p_df_uc)
   p_tot <- subplot(p,nrows=2,shareX=TRUE, titleY=TRUE)
-  #htmlwidgets::saveWidget(as_widget(p_tot), paste(name, ".html", sep=""))
+  htmlwidgets::saveWidget(as_widget(p_tot), paste(name, ".html", sep=""))
   p_tot
 }
 
