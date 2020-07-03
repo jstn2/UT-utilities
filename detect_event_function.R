@@ -36,9 +36,9 @@ mark_events <- function(df, df_c) {
   # Mark other outliers by referencing index
   #extras <- c(830,848:849,2018,5214,7370:7371)
   df$E_event[which(is.na(df_c$Elec))] <- 1
-  df$E_event[extras] <- 1
+  #df$E_event[extras] <- 1
   df$C_event[which(is.na(df_c$Cool))] <- 1
-  df$C_event[extras] <- 1
+  #df$C_event[extras] <- 1
   df$H_event[which(is.na(df_c$Heat))] <- 1
   df$W_event[which(is.na(df_c$Water))] <- 1
   #extra_water <- c()
