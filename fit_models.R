@@ -384,10 +384,24 @@ save(all_mods, file=file.path(data_dir,"models_with_cubist.RData"))
 
 # Save just the random forest models in a different file so it doesn't take so
 # long to load
-rf_mods701 <- list(ECJ_mods=all_mods[[1]][1:4], 
-                   GDC_mods=all_mods[[2]][1:4], 
-                   JCD_mods=all_mods[[3]][1:4])
+#
+# Modified Dynamic Code
+rf_mods701 <- list()
+for (i in 1:length(bldg_names)){
+  rf_mods701[[i]] <-  assign(paste(bldg_names[i],"_mods"), all_mods[[i]][1:4])
+}
+names(rf_mods701) <- paste(bldg_names,"mods", sep = "_")
+#
+# Original Code
+# rf_mods701 <- list(ECJ_mods=all_mods[[1]][1:4], 
+#                    GDC_mods=all_mods[[2]][1:4], 
+#                    JCD_mods=all_mods[[3]][1:4])
+
 save(rf_mods701,  file=file.path(data_dir,"rf_mods701.RData"))
+
+
+
+
 #load("rf_mods701.RData")
 
 # pdf(file="r2_and_RMSE.pdf")
