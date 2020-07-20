@@ -23,7 +23,6 @@ library(plyr)
 library(dplyr)
 library(tsmp)    # for mass search
 library(TSclust) # for sax search
-
 # Make this file's location the working directory
 # Finds the current file's location
 getCurrentFileLocation <-  function(){
@@ -84,7 +83,9 @@ select_motif <- TRUE
 #select_motif <- FALSE
 
 # If selecting motif from data set, define the start date and duration of motif in days
-motif_start <- "2018-08-01" # date yyyy-mm-dd hh:mm:ss
+# the time provided must be present within the time series. You can check this within the 
+# dfs_clean variable
+motif_start <- "2018-08-01 12:00:00" # date yyyy-mm-dd hh:mm:ss
 motif_duration <- 5 # days
 
 # If loading motif add file name below and ensure that it is in the data folder
@@ -92,9 +93,12 @@ motif_duration <- 5 # days
 motif_file_name <- "pattern.csv"
 
 # set the size of the window for the SAX search
-window_size <- 12
+# this is how many equal sized frames that the series will be reduced to along the x-axis
+window_size <- motif_duration*24
 
 # set the size of the alphabet for the SAX search
+# This is the amount of symbols used to represent the values of the series along the y-axis.
+# By default this is equal to the length of the motif. Change to appropriat evalue if loading motif from .csv
 alphabet_size <- 10
 
 # set how many standard deviations to remove from matric profile in search (see approx. line 317 in perforSearch function)
@@ -108,7 +112,7 @@ thresholds <- c(0.026,   0.15,   0.024)
 building_name <- "ECJ"
 
 # Set name of utility (EX: "Elec", "Cool", "Heat", "Water" ~ according to imported data)
-utility <- "Water"
+utility <- "Elec"
 
 # Set the units of the utility
 units <- "KwH"
@@ -119,9 +123,6 @@ if (class(viewer) != "logical")         viewer <- FALSE
 if (class(upload) != "logical")         upload <- FALSE
 if (class(save_html) != "logical")      save_html <- FALSE
 if (class(select_motif) != "logical")   select_motif <- TRUE
-
-
-
 
 
 ############################## Functions in order of reference ################################
@@ -211,7 +212,7 @@ ed_sax <- function(x, y, w, a){
   # x <- main data stream
   # y <- pattern to be compared (must be shorter in length than x)
   # w <- the amount of equal sized frames that the series will be reduced to during SAX calculation
-  # a <- size of alphabet
+  # a <- size of alphabet, The size of the alphabet, the amount of symbols used to represent the values of the series.
   
   # make empty vector to hold the distance
   ed <- integer(length(x)-length(y))
@@ -282,14 +283,15 @@ plotDistanceProfile <- function(df){
   
   fig <- plot_ly(df, x = ~DateTime, y = ~err_v2, name = 'MASS', type = 'scatter', mode = 'markers',marker = list(size = 4))%>% 
     add_trace(y = ~err_ed, name = 'Euclidean Distance', mode = 'markers')%>%
-    add_trace(y = ~err_sax, name = 'Symolic Approximation', mode = 'markers')%>% 
+    add_trace(y = ~err_sax, name = 'Symbolic Approximation', mode = 'markers')%>% 
     layout(title = paste0("Distance Profiles for ",building_name," ",utility),
              xaxis = list(title = "Date"),
              yaxis = list (title = "Normalized Distance"))
   return(fig)
 }
 
-# save, view, or plot images depending on arguments. Pass in variable from beginning of script to maintain settings throughout
+# save, view, or plot images depending on arguments. 
+# Pass in variable from beginning of script to maintain settings throughout
 processImage <- function(fig, name, save_img, viewer, upload, save_html){
   
   if(save_img){
@@ -498,8 +500,6 @@ plotPatterns <- function(df, matches, motif){
 # Set the time series based on building and utility info from cleaned data
 time_series <- setTimeSeries(utility, building_name, bldg_names, dfs_clean)
 
-# Potentially allow user to select time series through plotly? This would be really efficient for the user
-
 # Set the motif based on the user preferences of loading or selectiong motif from time series
 motif <- setMotif(time_series, select_motif, motif_file_name, motif_start, motif_duration)
 motif_duration <- length(motif)
@@ -509,17 +509,17 @@ errors <- performSearch(time_series, motif, window_size, alphabet_size, standard
 
 # plot distance proflies
 distance_plot <- plotDistanceProfile(errors)
-processImage(distance_plot, "distance_plot", save_img, viewer, upload, save_html)
+processImage(distance_plot, paste0("distance_plot_",building_name,"_",utility), save_img, viewer, upload, save_html)
 
 # Use thresholds to identify similar patterns
 matches <- identifyPatterns(errors, thresholds)
 
 # Plot patterns and provide information on errors
 time_series_plot <- plotSeriesAndPatterns(errors, matches)
-processImage(time_series_plot, "time_series_plot", save_img, viewer, upload, save_html)
+processImage(time_series_plot, paste0("time_series_plot_",building_name,"_",utility), save_img, viewer, upload, save_html)
 
 # make plots of patterns overlaid
 pattern_plot <- plotPatterns(errors, matches, motif)
-processImage(pattern_plot, "pattern_plot", save_img, viewer, upload, save_html)
+processImage(pattern_plot, paste0("pattern_plot_",building_name,"_",utility), save_img, viewer, upload, save_html)
 
 
