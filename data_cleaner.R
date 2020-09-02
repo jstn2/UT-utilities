@@ -12,7 +12,6 @@
 
 rm(list=ls())
 
-
 library(lubridate)
 library(magrittr)
 library(ggplot2)
