@@ -57,8 +57,9 @@ for (i in 1:length(name_list)) {
   assign(name_list[i], fread(file.path(data_dir, input[i])))
 }
 
-bldg_names <- c("ECJ", "GDC","JCD","BUI")
-dfs_tot <- list(ECJ, GDC, JCD, BUI)
+# Add extra building names here
+bldg_names <- c("ECJ", "GDC","JCD")
+dfs_tot <- list(ECJ, GDC, JCD)
 
 # //////////////////////////////////////////
 # import and process the temperature data 
